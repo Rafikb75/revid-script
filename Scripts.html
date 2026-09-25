@@ -1,0 +1,281 @@
+<script>
+/**
+ * AI Video Toolkit - Client-Side Interactive Controller
+ * Handles dynamic filtering, parameter routing, ROI calculator, and clipboard utilities.
+ */
+
+window.AI_TOOLKIT = (function() {
+  'use strict';
+
+  // Internal State
+  var state = {
+    searchQuery: '',
+    selectedCategory: 'all',
+    tools: [],
+    favorites: JSON.parse(localStorage.getItem('aivt_favorites') || '[]'),
+    calculator: {
+      videosPerMonth: 20,
+      hourlyCost: 45,
+      hoursSavedPerVideo: 2.5
+    }
+  };
+
+  /**
+   * Initializes client application
+   */
+  function init(initialTools) {
+    if (initialTools && Array.isArray(initialTools)) {
+      state.tools = initialTools;
+    }
+    setupEventListeners();
+    setupCalculator();
+    handleInitialRouting();
+  }
+
+  /**
+   * Sets up UI event listeners
+   */
+  function setupEventListeners() {
+    // Search input
+    var searchInput = document.getElementById('toolSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', function(e) {
+        state.searchQuery = e.target.value.toLowerCase().trim();
+        filterTools();
+      });
+    }
+
+    // Category Tabs
+    var catTabs = document.querySelectorAll('.cat-tab');
+    catTabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        catTabs.forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        state.selectedCategory = tab.getAttribute('data-cat') || 'all';
+        filterTools();
+        updateUrlParam('cat', state.selectedCategory);
+      });
+    });
+
+    // Window PopState / Hash change handling
+    window.addEventListener('popstate', function() {
+      handleInitialRouting();
+    });
+  }
+
+  /**
+   * Filter and search tool cards in the DOM
+   */
+  function filterTools() {
+    var cards = document.querySelectorAll('.tool-card-item');
+    var visibleCount = 0;
+
+    cards.forEach(function(card) {
+      var name = (card.getAttribute('data-name') || '').toLowerCase();
+      var cat = card.getAttribute('data-category') || '';
+      var tagline = (card.getAttribute('data-tagline') || '').toLowerCase();
+
+      var matchesSearch = !state.searchQuery || 
+        name.indexOf(state.searchQuery) !== -1 || 
+        tagline.indexOf(state.searchQuery) !== -1;
+      var matchesCategory = state.selectedCategory === 'all' || cat === state.selectedCategory;
+
+      if (matchesSearch && matchesCategory) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    var countDisplay = document.getElementById('visibleToolsCount');
+    if (countDisplay) {
+      countDisplay.textContent = visibleCount;
+    }
+
+    var noResultsBox = document.getElementById('noResultsBox');
+    if (noResultsBox) {
+      noResultsBox.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  }
+
+  /**
+   * Interactive ROI & Cost Calculator Engine
+   */
+  function setupCalculator() {
+    var sliderVideos = document.getElementById('calcVideosInput');
+    var sliderRate = document.getElementById('calcRateInput');
+    var valVideos = document.getElementById('calcVideosVal');
+    var valRate = document.getElementById('calcRateVal');
+
+    if (!sliderVideos || !sliderRate) return;
+
+    function recalculate() {
+      var vCount = parseInt(sliderVideos.value, 10) || 20;
+      var hourlyRate = parseInt(sliderRate.value, 10) || 45;
+      
+      if (valVideos) valVideos.textContent = vCount;
+      if (valRate) valRate.textContent = '$' + hourlyRate + '/hr';
+
+      // Calculation logic
+      // Traditional manual video editing: ~3.5 hours per short or scene
+      // With AI Video Toolkit (e.g. Revid AI + Descript): ~0.5 hours per short
+      var hoursSavedPerVideo = 3.0;
+      var totalHoursSavedMonth = Math.round(vCount * hoursSavedPerVideo);
+      
+      // Traditional labor cost
+      var laborCostSaved = totalHoursSavedMonth * hourlyRate;
+      
+      // Typical AI subscription overhead (e.g. Revid Pro $39 + Descript $19 = $58/mo)
+      var aiToolingOverhead = 58;
+      var netMonthlySavings = Math.max(0, laborCostSaved - aiToolingOverhead);
+      var annualSavings = netMonthlySavings * 12;
+
+      // Update DOM
+      var elHours = document.getElementById('calcHoursSaved');
+      var elNet = document.getElementById('calcNetSavings');
+      var elAnnual = document.getElementById('calcAnnualSavings');
+
+      if (elHours) elHours.textContent = totalHoursSavedMonth + ' hrs';
+      if (elNet) elNet.textContent = '$' + netMonthlySavings.toLocaleString();
+      if (elAnnual) elAnnual.textContent = '$' + annualSavings.toLocaleString() + ' / year';
+    }
+
+    sliderVideos.addEventListener('input', recalculate);
+    sliderRate.addEventListener('input', recalculate);
+    recalculate();
+  }
+
+  /**
+   * Clipboard Copy Utility with Toast Notification
+   */
+  function copyToClipboard(text, successMessage) {
+    if (!navigator.clipboard) {
+      // Fallback
+      var textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMessage || 'Copied to clipboard!');
+      } catch (err) {
+        showToast('Unable to copy', true);
+      }
+      document.body.removeChild(textArea);
+      return;
+    }
+
+    navigator.clipboard.writeText(text).then(function() {
+      showToast(successMessage || 'Copied to clipboard!');
+    }, function() {
+      showToast('Error copying text', true);
+    });
+  }
+
+  /**
+   * Displays temporary toast notification
+   */
+  function showToast(message, isError) {
+    var container = document.getElementById('toastContainer');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toastContainer';
+      container.className = 'toast-container';
+      document.body.appendChild(container);
+    }
+
+    var toast = document.createElement('div');
+    toast.className = 'toast';
+    if (isError) toast.style.borderColor = 'var(--accent-rose)';
+
+    var iconSvg = isError 
+      ? '<svg width="16" height="16" fill="none" stroke="#f43f5e" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+      : '<svg width="16" height="16" fill="none" stroke="#10b981" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+
+    toast.innerHTML = iconSvg + '<span>' + message + '</span>';
+    container.appendChild(toast);
+
+    setTimeout(function() {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s ease';
+      setTimeout(function() {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 300);
+    }, 2800);
+  }
+
+  /**
+   * Favorite toggling stored in localStorage
+   */
+  function toggleFavorite(toolId) {
+    var index = state.favorites.indexOf(toolId);
+    if (index === -1) {
+      state.favorites.push(toolId);
+      showToast('Saved to your toolkit!');
+    } else {
+      state.favorites.splice(index, 1);
+      showToast('Removed from saved toolkit');
+    }
+    localStorage.setItem('aivt_favorites', JSON.stringify(state.favorites));
+    updateFavoriteButtons();
+  }
+
+  function updateFavoriteButtons() {
+    var buttons = document.querySelectorAll('[data-fav-btn]');
+    buttons.forEach(function(btn) {
+      var id = btn.getAttribute('data-fav-btn');
+      if (state.favorites.indexOf(id) !== -1) {
+        btn.classList.add('bookmarked');
+        btn.setAttribute('title', 'Saved');
+      } else {
+        btn.classList.remove('bookmarked');
+        btn.setAttribute('title', 'Save Tool');
+      }
+    });
+  }
+
+  /**
+   * URL Parameter helper
+   */
+  function updateUrlParam(key, val) {
+    if (window.history && window.history.replaceState) {
+      var url = new URL(window.location.href);
+      if (val && val !== 'all') {
+        url.searchParams.set(key, val);
+      } else {
+        url.searchParams.delete(key);
+      }
+      window.history.replaceState({}, '', url.toString());
+    }
+  }
+
+  /**
+   * Initial page and hash parsing
+   */
+  function handleInitialRouting() {
+    var params = new URLSearchParams(window.location.search);
+    var cat = params.get('cat');
+    if (cat) {
+      state.selectedCategory = cat;
+      var targetTab = document.querySelector('.cat-tab[data-cat="' + cat + '"]');
+      if (targetTab) {
+        var catTabs = document.querySelectorAll('.cat-tab');
+        catTabs.forEach(function(t) { t.classList.remove('active'); });
+        targetTab.classList.add('active');
+        filterTools();
+      }
+    }
+    updateFavoriteButtons();
+  }
+
+  return {
+    init: init,
+    filterTools: filterTools,
+    copyToClipboard: copyToClipboard,
+    toggleFavorite: toggleFavorite,
+    showToast: showToast
+  };
+})();
+</script>

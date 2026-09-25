@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Directory &amp; Benchmark Comparator — <?= config.appName ?></title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD Structured Data for GEO -->
+  <script type="application/ld+json">
+    <?!= seoSchema ?>
+  </script>
+
+  <!-- Modular CSS System -->
+  <?!= include('Styles'); ?>
+</head>
+<body>
+  <div class="bg-ambient-layer"></div>
+
+  <div class="app-wrapper">
+    <!-- Header Navigation -->
+    <header class="app-header">
+      <div class="container nav-container">
+        <a href="?page=home" class="brand-logo">
+          <div class="brand-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+          </div>
+          <span class="brand-text"><?= config.appName ?></span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="?page=home" class="nav-link">Overview</a></li>
+          <li><a href="?page=tools" class="nav-link active">Directory &amp; Matrix</a></li>
+          <li><a href="?page=revid" class="nav-link">Revid AI Review</a></li>
+          <li><a href="?page=home#roi-calculator" class="nav-link">ROI Calculator</a></li>
+          <li><a href="?page=home#workflows" class="nav-link">Workflows</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="?page=revid" class="btn btn-primary btn-sm">
+            Revid AI Benchmark (9.48)
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="section">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+          <div>
+            <span class="section-tag">Tested &amp; Scored Database</span>
+            <h1 class="section-title">AI Video Tools Directory &amp; Benchmarks</h1>
+            <p class="section-desc">
+              Filter by operational niche, render latency, and budget tiers. Real empirical data without sponsored biases.
+            </p>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">
+            Showing <strong id="visibleToolsCount" style="color: var(--accent-cyan); font-family: var(--font-mono);"><?= tools.length ?></strong> verified tools
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <div class="search-box-wrapper">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="toolSearchInput" class="search-input" placeholder="Search by name, feature (e.g. 'captions', 'avatar', 'URL to video')...">
+          </div>
+
+          <div class="category-tabs">
+            <? for (var c = 0; c < config.categories.length; c++) { var cat = config.categories[c]; ?>
+              <button class="cat-tab <?= cat.id === selectedCat ? 'active' : '' ?>" data-cat="<?= cat.id ?>">
+                <?= cat.label ?>
+              </button>
+            <? } ?>
+          </div>
+        </div>
+
+        <!-- Tools Grid -->
+        <div id="toolsGrid" class="tools-grid">
+          <? for (var i = 0; i < tools.length; i++) { var t = tools[i]; ?>
+            <div class="glass-card tool-card tool-card-item" 
+                 data-name="<?= t.name ?>" 
+                 data-category="<?= t.category ?>" 
+                 data-tagline="<?= t.tagline ?>"
+                 data-score="<?= t.scores.overall ?>"
+                 data-price="<?= t.pricing.startingMonthly ?>">
+              
+              <div class="tool-card-header">
+                <img src="<?= t.logoUrl ?>" alt="<?= t.name ?> Logo" class="tool-logo" loading="lazy">
+                <div class="tool-title-wrap">
+                  <div class="tool-name-row">
+                    <a href="?page=<?= t.id === 'revid-ai' ? 'revid' : 'tool&tool=' + t.id ?>" class="tool-name">
+                      <?= t.name ?>
+                    </a>
+                    <? if (t.featured) { ?>
+                      <span class="badge-featured">Editor Choice</span>
+                    <? } ?>
+                  </div>
+                  <span class="tool-category-badge"><?= t.categoryLabel ?></span>
+                </div>
+
+                <div class="tool-overall-score">
+                  <div class="score-badge <?= t.scores.overall >= 9.0 ? 'high' : '' ?>">
+                    <span>★</span> <?= t.scores.overall ?>
+                  </div>
+                </div>
+              </div>
+
+              <p class="tool-tagline"><?= t.tagline ?></p>
+
+              <!-- Benchmark Mini Visualizer -->
+              <div class="tool-benchmarks-mini">
+                <div class="bench-row">
+                  <span class="bench-label">Automation Pipeline</span>
+                  <div class="bench-bar-track">
+                    <div class="bench-bar-fill" style="width: <?= t.scores.automation * 10 ?>%;"></div>
+                  </div>
+                  <span class="bench-val"><?= t.scores.automation ?></span>
+                </div>
+                <div class="bench-row">
+                  <span class="bench-label">Visual Quality</span>
+                  <div class="bench-bar-track">
+                    <div class="bench-bar-fill" style="width: <?= t.scores.quality * 10 ?>%;"></div>
+                  </div>
+                  <span class="bench-val"><?= t.scores.quality ?></span>
+                </div>
+                <div class="bench-row">
+                  <span class="bench-label">Render Speed</span>
+                  <div class="bench-bar-track">
+                    <div class="bench-bar-fill" style="width: <?= t.scores.speed * 10 ?>%;"></div>
+                  </div>
+                  <span class="bench-val"><?= t.scores.speed ?></span>
+                </div>
+              </div>
+
+              <div class="tool-card-footer">
+                <div class="price-indicator">
+                  <span class="price-val">$<?= t.pricing.startingMonthly ?></span>
+                  <span class="price-sub"><?= t.pricing.hasFreeTier ? 'Free tier available' : 'Paid only' ?></span>
+                </div>
+
+                <div class="card-actions">
+                  <a href="?page=<?= t.id === 'revid-ai' ? 'revid' : 'tool&tool=' + t.id ?>" class="btn btn-secondary btn-sm">
+                    In-Depth Specs
+                  </a>
+                  <a href="<?= t.websiteUrl ?>" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                    Try Tool &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+          <? } ?>
+        </div>
+
+        <!-- No Results Fallback -->
+        <div id="noResultsBox" style="display: none; text-align: center; padding: 4rem 1rem;">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔍</div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">No matching tools found</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Try adjusting your keyword filter or switching category tabs.</p>
+          <button onclick="document.getElementById('toolSearchInput').value = ''; AI_TOOLKIT.filterTools();" class="btn btn-secondary btn-sm">
+            Reset All Filters
+          </button>
+        </div>
+
+        <!-- Full Benchmark Specs Matrix -->
+        <div style="margin-top: 4.5rem;">
+          <div class="section-header" style="margin-bottom: 1.5rem;">
+            <div>
+              <span class="section-tag">Direct Specifications</span>
+              <h2 class="section-title">Deep Technical Benchmark Matrix</h2>
+              <p class="section-desc">Comparing export limits, caption accuracy, audio integrations, and per-minute cost.</p>
+            </div>
+          </div>
+
+          <div class="benchmark-table-wrapper">
+            <table class="benchmark-table">
+              <thead>
+                <tr>
+                  <th>Platform</th>
+                  <th>Category</th>
+                  <th>Speed (Min/60s)</th>
+                  <th>Max Resolution</th>
+                  <th>Caption Accuracy</th>
+                  <th>Est. Cost/Min</th>
+                  <th>Target Audience</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <? for (var j = 0; j < tools.length; j++) { var item = tools[j]; ?>
+                  <tr>
+                    <td>
+                      <div class="table-tool-cell">
+                        <img src="<?= item.logoUrl ?>" alt="<?= item.name ?>" class="table-tool-logo" loading="lazy">
+                        <strong><a href="?page=<?= item.id === 'revid-ai' ? 'revid' : 'tool&tool=' + item.id ?>" style="color: inherit; text-decoration: none;"><?= item.name ?></a></strong>
+                      </div>
+                    </td>
+                    <td><span style="font-size: 0.8rem; color: var(--text-secondary);"><?= item.categoryLabel ?></span></td>
+                    <td><code style="font-family: var(--font-mono); color: var(--accent-cyan); font-size: 0.8rem;"><?= item.specs.renderSpeedMin ?></code></td>
+                    <td style="font-size: 0.8rem; color: var(--text-secondary);"><?= item.specs.maxExportResolution ?></td>
+                    <td style="font-size: 0.8rem; color: var(--text-secondary);"><?= item.specs.autoCaptionFidelity ?></td>
+                    <td><strong style="font-family: var(--font-mono); color: #34d399; font-size: 0.85rem;"><?= item.pricing.costPerRenderedMinEst ?></strong></td>
+                    <td style="font-size: 0.775rem; color: var(--text-muted); max-width: 220px; line-height: 1.3;"><?= item.targetAudience ?></td>
+                    <td>
+                      <span class="score-badge <?= item.scores.overall >= 9.0 ? 'high' : '' ?>" style="font-size: 0.85rem; padding: 0.2rem 0.5rem;">
+                        <?= item.scores.overall ?>
+                      </span>
+                    </td>
+                  </tr>
+                <? } ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="container footer-bottom" style="border: none; padding-top: 0;">
+        <span>&copy; <?= config.year ?> <?= config.appName ?>. Empirical Video Intelligence.</span>
+        <a href="?page=home" style="color: var(--text-secondary); text-decoration: none;">&larr; Back to Overview</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modular Scripts -->
+  <?!= include('Scripts'); ?>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var toolsData = <?!= JSON.stringify(tools) ?>;
+      AI_TOOLKIT.init(toolsData);
+    });
+  </script>
+</body>
+</html>

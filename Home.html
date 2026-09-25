@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?= config.appName ?> — Benchmark Comparator & AI Video Workflows</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Schema.org JSON-LD Structured Data for GEO -->
+  <script type="application/ld+json">
+    <?!= seoSchema ?>
+  </script>
+  <script type="application/ld+json">
+    <?!= howToSchema ?>
+  </script>
+  <script type="application/ld+json">
+    <?!= faqSchema ?>
+  </script>
+
+  <!-- Modular CSS System -->
+  <?!= include('Styles'); ?>
+</head>
+<body>
+  <div class="bg-ambient-layer"></div>
+
+  <div class="app-wrapper">
+    <!-- Header Navigation -->
+    <header class="app-header">
+      <div class="container nav-container">
+        <a href="?page=home" class="brand-logo">
+          <div class="brand-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+          </div>
+          <span class="brand-text"><?= config.appName ?></span>
+          <span class="brand-badge">2025 Benchmarks</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="?page=home" class="nav-link active">Overview</a></li>
+          <li><a href="?page=tools" class="nav-link">Directory & Matrix</a></li>
+          <li><a href="?page=revid" class="nav-link">Revid AI Review</a></li>
+          <li><a href="#roi-calculator" class="nav-link">ROI Calculator</a></li>
+          <li><a href="#workflows" class="nav-link">Workflows</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="?page=tools" class="btn btn-secondary btn-sm">Explore 8+ Tools</a>
+          <a href="?page=revid" class="btn btn-primary btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Revid AI Benchmark
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="container">
+          <div class="hero-pill">
+            <span class="hero-pill-badge">Empirical Analysis</span>
+            <span>Tested on RTX 4090 Rigs + Cloud API Latency Tracing</span>
+          </div>
+
+          <h1 class="hero-title">
+            The Creator's Benchmark &amp; <br>
+            <span class="hero-gradient-text">Workflow Directory for AI Video</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Cut through marketing hype. We empirically benchmark render latencies, lip-sync fidelity, 
+            automation pipelines, and cost-per-minute across the world's most powerful AI video platforms.
+          </p>
+
+          <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <a href="?page=tools" class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+              View Full Benchmark Matrix
+            </a>
+            <a href="?page=revid" class="btn btn-outline-cyan">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Read Revid AI Deep Dive (9.48 / 10)
+            </a>
+          </div>
+
+          <!-- Hero Metrics -->
+          <div class="hero-metrics-grid">
+            <div class="metric-stat-card">
+              <div class="metric-number">840+</div>
+              <div class="metric-label">Benchmark Renders Logged</div>
+            </div>
+            <div class="metric-stat-card">
+              <div class="metric-number">98.2%</div>
+              <div class="metric-label">Max Caption Accuracy</div>
+            </div>
+            <div class="metric-stat-card">
+              <div class="metric-number">0.75m</div>
+              <div class="metric-label">Fastest 60s Generation</div>
+            </div>
+            <div class="metric-stat-card">
+              <div class="metric-number">$0.18</div>
+              <div class="metric-label">Lowest Cost / Rendered Min</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Comparison Matrix Section -->
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <span class="section-tag">Empirical Comparator</span>
+              <h2 class="section-title">Head-to-Head Flagship Matrix</h2>
+              <p class="section-desc">Direct comparison of our top four tested creator engines across core operational pillars.</p>
+            </div>
+            <a href="?page=tools" class="btn btn-secondary btn-sm">Full 8-Tool Table &rarr;</a>
+          </div>
+
+          <div class="benchmark-table-wrapper">
+            <table class="benchmark-table">
+              <thead>
+                <tr>
+                  <th>Platform</th>
+                  <th>Primary Superpower</th>
+                  <th>Render Speed (60s)</th>
+                  <th>Automation Score</th>
+                  <th>Visual Quality</th>
+                  <th>Starting Plan</th>
+                  <th>Editorial Verdict</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <? for (var i = 0; i < Math.min(4, tools.length); i++) { var t = tools[i]; ?>
+                  <tr>
+                    <td>
+                      <div class="table-tool-cell">
+                        <img src="<?= t.logoUrl ?>" alt="<?= t.name ?>" class="table-tool-logo" loading="lazy">
+                        <div>
+                          <strong><a href="?page=<?= t.id === 'revid-ai' ? 'revid' : 'tool&tool=' + t.id ?>" style="color: inherit; text-decoration: none;"><?= t.name ?></a></strong>
+                          <? if (t.editorChoice) { ?>
+                            <span style="font-size: 0.65rem; background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; border-radius: 4px; margin-left: 0.3rem;">Editor Choice</span>
+                          <? } ?>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span style="color: var(--text-secondary);"><?= t.categoryLabel ?></span></td>
+                    <td><code style="font-family: var(--font-mono); color: var(--accent-cyan);"><?= t.specs.renderSpeedMin ?></code></td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-family: var(--font-mono); font-weight: 700;"><?= t.scores.automation ?></span>
+                        <div class="bench-bar-track" style="width: 60px;">
+                          <div class="bench-bar-fill" style="width: <?= t.scores.automation * 10 ?>%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-family: var(--font-mono); font-weight: 700;"><?= t.scores.quality ?></span>
+                        <div class="bench-bar-track" style="width: 60px;">
+                          <div class="bench-bar-fill" style="width: <?= t.scores.quality * 10 ?>%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <strong style="font-family: var(--font-mono);">$<?= t.pricing.startingMonthly ?></strong>
+                      <span style="font-size: 0.75rem; color: var(--text-muted);">/mo</span>
+                    </td>
+                    <td style="max-width: 260px; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
+                      <?= t.verdict.substring(0, 95) ?>...
+                    </td>
+                    <td>
+                      <a href="?page=<?= t.id === 'revid-ai' ? 'revid' : 'tool&tool=' + t.id ?>" class="btn btn-secondary btn-sm">Review</a>
+                    </td>
+                  </tr>
+                <? } ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Spotlight: Revid AI -->
+      <section class="section" style="padding-top: 1rem;">
+        <div class="container">
+          <div class="revid-hero-panel">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+              <span class="hero-pill-badge" style="background: var(--accent-cyan); color: #090d16;">Featured Editorial Spotlight</span>
+              <span style="font-size: 0.85rem; color: #a5f3fc; font-weight: 600;">9.48 / 10 Overall Benchmark Rating</span>
+            </div>
+
+            <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem;">
+              Revid AI: The 4-Minute Viral Short-Form Engine
+            </h2>
+            <p style="max-width: 820px; font-size: 1.05rem; color: #e2e8f0; line-height: 1.6; margin-bottom: 2rem;">
+              While foundational models like Runway Gen-3 focus on raw visual synthesis, <strong>Revid AI</strong> 
+              attacks creator friction directly: auto-parsing web links, generating retention-engineered hooks, 
+              and rendering kinetic synchronized captions with context-aware B-roll.
+            </p>
+
+            <div class="revid-highlight-grid">
+              <div class="glass-card" style="padding: 1.25rem;">
+                <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.4rem;">⚡ Rapid Repurposing</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Turn any blog post, YouTube link, or raw voice memo into a published vertical short in under 4 minutes.</p>
+              </div>
+              <div class="glass-card" style="padding: 1.25rem;">
+                <div style="color: #a855f7; font-weight: 700; margin-bottom: 0.4rem;">🎯 98.2% Caption Accuracy</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Word-level kinetic subtitles with animated emojis, Hormozi-style highlighting, and zero manual sync required.</p>
+              </div>
+              <div class="glass-card" style="padding: 1.25rem;">
+                <div style="color: #10b981; font-weight: 700; margin-bottom: 0.4rem;">💰 $0.32 / Rendered Min</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Significant ROI advantage over hiring freelance video editors ($35-$75/short) or burning credits on raw diffusion.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <a href="?page=revid" class="btn btn-primary">
+                Read Full Revid AI Benchmark Analysis &rarr;
+              </a>
+              <a href="https://www.revid.ai/?via=creator-toolkit" target="_blank" rel="noopener" class="btn btn-secondary">
+                Visit Official Revid AI Site (Free Trial)
+              </a>
+              <button onclick="AI_TOOLKIT.copyToClipboard('TOOLKIT20', 'Promo code TOOLKIT20 copied! 20% off applied.')" class="btn btn-outline-cyan">
+                Copy 20% Promo: TOOLKIT20
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive ROI & Cost Calculator -->
+      <section id="roi-calculator" class="section">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <span class="section-tag">Financial Modeling</span>
+              <h2 class="section-title">Interactive Creator ROI &amp; Cost Calculator</h2>
+              <p class="section-desc">Estimate monthly time and dollar savings by switching manual editing pipelines to AI video workflows.</p>
+            </div>
+          </div>
+
+          <div class="calc-card">
+            <div class="calc-controls">
+              <div class="slider-group">
+                <div class="slider-header">
+                  <span>Videos Produced Per Month</span>
+                  <span id="calcVideosVal" class="slider-val">20</span>
+                </div>
+                <input type="range" id="calcVideosInput" class="custom-range" min="4" max="100" value="20" step="2">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                  <span>4 (Casual)</span>
+                  <span>50 (Agency)</span>
+                  <span>100 (Media Empire)</span>
+                </div>
+              </div>
+
+              <div class="slider-group">
+                <div class="slider-header">
+                  <span>Hourly Value of Your / Editor's Time</span>
+                  <span id="calcRateVal" class="slider-val">$45/hr</span>
+                </div>
+                <input type="range" id="calcRateInput" class="custom-range" min="20" max="150" value="45" step="5">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                  <span>$20/hr</span>
+                  <span>$75/hr</span>
+                  <span>$150/hr</span>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: var(--radius-md); font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                <strong style="color: var(--text-secondary);">Benchmark Baseline:</strong> Assumes traditional workflow of 3.5 hrs/video (scripting, B-roll hunting, keyframing subtitles, audio leveling) vs. 0.5 hrs/video with Revid AI or Descript automation.
+              </div>
+            </div>
+
+            <div class="calc-result-box">
+              <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-cyan); font-weight: 700;">
+                Estimated Net Monthly Savings
+              </span>
+              <div id="calcNetSavings" class="calc-headline-savings">$2,642</div>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle); margin-top: 1rem;">
+                <div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Production Hours Saved</div>
+                  <div id="calcHoursSaved" style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: #f8fafc; margin-top: 0.2rem;">60 hrs</div>
+                </div>
+                <div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Projected Annual ROI</div>
+                  <div id="calcAnnualSavings" style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: #34d399; margin-top: 0.2rem;">$31,704 / yr</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Creator Workflow Presets -->
+      <section id="workflows" class="section">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <span class="section-tag">Tested Blueprints</span>
+              <h2 class="section-title">Creator Production Workflows</h2>
+              <p class="section-desc">Battle-tested multi-tool stacks optimized for distinct publishing objectives.</p>
+            </div>
+          </div>
+
+          <div class="workflow-grid">
+            <? for (var w = 0; w < workflowMatrices.length; w++) { var wf = workflowMatrices[w]; ?>
+              <div class="glass-card workflow-card">
+                <div>
+                  <span class="workflow-pill"><?= wf.efficiencyGain ?></span>
+                  <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0.75rem 0 0.5rem;"><?= wf.goal ?></h3>
+                </div>
+
+                <div style="font-size: 0.825rem; color: var(--text-secondary); background: rgba(10, 13, 20, 0.5); padding: 0.75rem; border-radius: var(--radius-md);">
+                  <div style="margin-bottom: 0.3rem;"><strong style="color: var(--accent-cyan);">Primary Engine:</strong> <?= wf.primaryTool ?></div>
+                  <div><strong style="color: #a855f7;">Secondary Tool:</strong> <?= wf.secondaryTool ?></div>
+                </div>
+
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; flex-grow: 1;">
+                  <?= wf.workflow ?>
+                </p>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem; font-size: 0.8rem;">
+                  <span style="color: var(--text-muted);">Execution Time:</span>
+                  <strong style="font-family: var(--font-mono); color: #34d399;"><?= wf.estimatedTimeMin ?> mins</strong>
+                </div>
+              </div>
+            <? } ?>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <div class="brand-icon-box" style="width: 32px; height: 32px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+              </div>
+              <span style="font-size: 1.1rem; font-weight: 800;"><?= config.appName ?></span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; max-width: 320px;">
+              An independent creator benchmark comparator testing cutting-edge generative video, automated repurposing, and synthetic avatars.
+            </p>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Platforms Tested</div>
+            <ul class="footer-links">
+              <li><a href="?page=revid">Revid AI Review</a></li>
+              <li><a href="?page=tool&tool=runway-gen3">Runway Gen-3 Alpha</a></li>
+              <li><a href="?page=tool&tool=descript">Descript Audio/Video</a></li>
+              <li><a href="?page=tool&tool=heygen">HeyGen Avatars</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Benchmarks</div>
+            <ul class="footer-links">
+              <li><a href="?page=tools&cat=short-form">Short-Form Engines</a></li>
+              <li><a href="?page=tools&cat=generative">Generative B-Roll</a></li>
+              <li><a href="?page=tools&cat=avatar">Avatar Synthesizers</a></li>
+              <li><a href="?page=tools&cat=editorial">Text-Based Editors</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Editorial Transparency</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.75rem;">
+              We fund our lab via affiliate commissions on select links at zero extra cost to creators. All benchmarks are verified on isolated test hardware.
+            </p>
+            <span style="font-size: 0.75rem; color: #a5b4fc;">Tested by <?= config.editorialBoard.leadEditor ?></span>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>&copy; <?= config.year ?> <?= config.appName ?>. All rights reserved.</span>
+          <span>Version <?= config.version ?></span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modular Scripts -->
+  <?!= include('Scripts'); ?>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize client engine
+      var toolsData = <?!= JSON.stringify(tools) ?>;
+      AI_TOOLKIT.init(toolsData);
+    });
+  </script>
+</body>
+</html>
